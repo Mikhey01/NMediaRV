@@ -29,7 +29,7 @@ class InMemoryPostRepository : PostRepository {
                 likeByMe = false,
                 countLikes = 999,
                 countShare = 0,
-                countViews = 0,
+                countViews = 450,
             ),
             Post(
                 id = 3,
@@ -39,7 +39,7 @@ class InMemoryPostRepository : PostRepository {
                 likeByMe = false,
                 countLikes = 1999,
                 countShare = 0,
-                countViews = 0,
+                countViews = 210,
             ),
             Post(
                 id = 2,
@@ -49,7 +49,7 @@ class InMemoryPostRepository : PostRepository {
                 likeByMe = false,
                 countLikes = 9,
                 countShare = 0,
-                countViews = 0,
+                countViews = 110,
             ),
             Post(
                 id = 8,
@@ -59,7 +59,77 @@ class InMemoryPostRepository : PostRepository {
                 likeByMe = false,
                 countLikes = 999,
                 countShare = 0,
-                countViews = 0,
+                countViews = 10,
+            ),
+            Post(
+                id = 7,
+                author = "Нетология. Университет - профессий",
+                content = "Наша миссия ",
+                "19 мая в 23:47",
+                likeByMe = false,
+                countLikes = 99,
+                countShare = 0,
+                countViews = 10,
+            ),
+            Post(
+                id = 4,
+                author = "Нетология. Университет - профессий",
+                content = " помочь встать ",
+                "15 мая в 23:47",
+                likeByMe = false,
+                countLikes = 9999,
+                countShare = 0,
+                countViews = 10,
+            ),
+            Post(
+                id = 55,
+                author = "Нетология. Университет - профессий",
+                content = "Наша миссия начать цепочку перемен.",
+                "25 мая в 23:47",
+                likeByMe = false,
+                countLikes = 115,
+                countShare = 0,
+                countViews = 10,
+            ),
+            Post(
+                id = 78,
+                author = "Нетология. Университет - профессий",
+                content = " помочь встать на путь роста и начать цепочку перемен.",
+                "18 июня в 23:47",
+                likeByMe = false,
+                countLikes = 1478,
+                countShare = 0,
+                countViews = 10,
+            ),
+            Post(
+                id = 888,
+                author = "Нетология. Университет - профессий",
+                content = "Наша миссия - помочь встать на путь роста .",
+                "18 августа в 23:47",
+                likeByMe = false,
+                countLikes = 999,
+                countShare = 0,
+                countViews = 10,
+            ),
+            Post(
+                id = 748,
+                author = "Нетология. Университет - профессий",
+                content = "Наша миссия - помочь встать на путь роста и начать цепочку перемен.",
+                "18 января в 23:47",
+                likeByMe = false,
+                countLikes = 8549,
+                countShare = 0,
+                countViews = 10,
+            ),
+            Post(
+                id = 1428,
+                author = "Нетология. Университет - профессий",
+                content = "Наша миссия - помочь  начать цепочку перемен.",
+                "18 марта в 23:47",
+                likeByMe = false,
+                countLikes = 3629,
+                countShare = 0,
+                countViews = 10,
             ),
         )
         data = MutableLiveData(inishinaPost)
@@ -67,9 +137,9 @@ class InMemoryPostRepository : PostRepository {
     }
 
 
-    override fun likes(postId: Long) {
-        posts = posts.map { post ->
-            if (post.id != postId) post else post.copy(
+    override fun likes(id: Long) {
+                posts = posts.map { post ->
+            if (post.id != id) post else post.copy(
                 likeByMe = !post.likeByMe,
                 countLikes = if (post.likeByMe) post.countLikes++ else post.countLikes--
             )
@@ -78,9 +148,9 @@ class InMemoryPostRepository : PostRepository {
 
     }
 
-    override fun share(postId: Long) {
+    override fun share() {
         posts = posts.map { post ->
-            if (post.id != postId) post else post.copy(
+           post.copy(
                 countShare = post.countShare++
             )
         }

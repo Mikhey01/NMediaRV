@@ -10,11 +10,9 @@ import ru.netology.nmedia.Post
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 
-//import ru.netology.nmedia.service
+typealias ClickListener = (Post) -> Unit
 
-typealias ClickListener = (post : Post) -> Unit
-
-fun likesCounters (count: Long): String {
+fun likesCounters(count: Long): String {
     val result = when {
         count < 1_000 -> count.toString()
         count in 1_000..1_099 -> "1K"
@@ -26,16 +24,10 @@ fun likesCounters (count: Long): String {
     return result
 }
 
-class PostAdapter(
-   private val likeClickListener: ClickListener,
-   private val shareClickListener: ClickListener
-) : ListAdapter <Post, PostAdapter.PostViewHolder>(PostDiffItemCallback()) {
-    private var list = emptyList<Post>()
-        @SuppressLint("NotifyDataSetChanged")
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+class PostAdaptor(
+    private val likeClickListener: ClickListener,
+    private val shareClickListener: ClickListener
+) : ListAdapter<Post, PostAdaptor.PostViewHolder>(PostDiffItemCallback()) {
 
     class PostViewHolder(
         private val binding: CardPostBinding,
@@ -50,19 +42,23 @@ class PostAdapter(
             quantityShare.text = likesCounters(post.countShare)
             numberViews.text = likesCounters(post.countViews)
 
+
             if (post.likeByMe) {
-                likes.setImageResource(R.drawable.outline_favorite_border_24)
+                like.setImageResource(R.drawable.ic_favorite_24dp)
 
             } else {
-                likes.setImageResource(R.drawable.ic_favorite_24dp)
+                like.setImageResource(R.drawable.outline_favorite_border_24)
+
             }
-            likes.setOnClickListener {
+
+            like.setOnClickListener {
                 likeClickListener(post)
+
             }
+
             share.setOnClickListener {
                 shareClickListener(post)
             }
-            likes
         }
     }
 
@@ -72,27 +68,9 @@ class PostAdapter(
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        val post = list[position]
+        val post = getItem(position)
         holder.bind(post)
     }
-
-    //    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder =
-//        PostViewHolder(
-//            binding = CardPostBinding.inflate(
-//                LayoutInflater.from(parent.context),
-//                parent,
-//                false
-//            ),
-//            likeClickListener = likeClickListener,
-//            shareClickListener = shareClickListener
-//        )
-//
-//    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-//        val post = getItem(position)
-//        holder.bind(post)
-//    }
-    override fun getItemCount(): Int = list.size
-
 
 
 }
