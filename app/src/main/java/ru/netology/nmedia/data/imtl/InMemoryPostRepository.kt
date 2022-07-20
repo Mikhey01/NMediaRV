@@ -137,20 +137,18 @@ class InMemoryPostRepository : PostRepository {
     }
 
 
-    override fun likes(id: Long) {
-                posts = posts.map { post ->
-            if (post.id != id) post else post.copy(
+    override fun likeById(postId: Long) {
+        data.value = posts.map { post ->
+            if (post.id != postId) post else post.copy(
                 likeByMe = !post.likeByMe,
                 countLikes = if (post.likeByMe) post.countLikes++ else post.countLikes--
             )
         }
-        data.value = posts
-
     }
 
-    override fun share() {
+    override fun shareById(postId: Long) {
         posts = posts.map { post ->
-           post.copy(
+            post.copy(
                 countShare = post.countShare++
             )
         }

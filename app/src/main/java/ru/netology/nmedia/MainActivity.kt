@@ -5,6 +5,7 @@ package ru.netology.nmedia
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.card_post.*
 import ru.netology.nmedia.adapter.PostAdaptor
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.viewModel.PostViewModel
@@ -20,15 +21,12 @@ class MainActivity : AppCompatActivity() {
 
         val viewModel: PostViewModel by viewModels()
         val adapter = PostAdaptor(
-
-            likeClickListener = {
-                viewModel.onLikeClicked(it.id)
+            likeClickListener = {post ->
+                viewModel.onLikeClicked(post.id)
             },
-
-            shareClickListener = { post ->
-                viewModel.onShareClicked(post)
+            shareClickListener = {post ->
+                viewModel.onShareClicked(post.id)
             }
-
         )
 
 

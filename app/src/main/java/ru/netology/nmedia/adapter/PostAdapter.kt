@@ -1,6 +1,5 @@
 package ru.netology.nmedia.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -10,7 +9,7 @@ import ru.netology.nmedia.Post
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 
-typealias ClickListener = (Post) -> Unit
+//typealias ClickListener = (Post) -> Unit
 
 fun likesCounters(count: Long): String {
     val result = when {
@@ -25,14 +24,14 @@ fun likesCounters(count: Long): String {
 }
 
 class PostAdaptor(
-    private val likeClickListener: ClickListener,
-    private val shareClickListener: ClickListener
+    private val likeClickListener : (Post) -> Unit,
+    private val shareClickListener: (Post) -> Unit
 ) : ListAdapter<Post, PostAdaptor.PostViewHolder>(PostDiffItemCallback()) {
 
     class PostViewHolder(
         private val binding: CardPostBinding,
-        private val likeClickListener: ClickListener,
-        private val shareClickListener: ClickListener
+        private val likeClickListener: (Post) -> Unit,
+        private val shareClickListener: (Post) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(post: Post) = with(binding) {
             authorName.text = post.author
@@ -41,21 +40,16 @@ class PostAdaptor(
             quantityFavorit.text = likesCounters(post.countLikes)
             quantityShare.text = likesCounters(post.countShare)
             numberViews.text = likesCounters(post.countViews)
-
-
             if (post.likeByMe) {
                 like.setImageResource(R.drawable.ic_favorite_24dp)
-
             } else {
                 like.setImageResource(R.drawable.outline_favorite_border_24)
-
             }
 
             like.setOnClickListener {
                 likeClickListener(post)
 
             }
-
             share.setOnClickListener {
                 shareClickListener(post)
             }
@@ -71,10 +65,7 @@ class PostAdaptor(
         val post = getItem(position)
         holder.bind(post)
     }
-
-
 }
-
 
 class PostDiffItemCallback : DiffUtil.ItemCallback<Post>() {
     override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean =

@@ -7,6 +7,6 @@ interface PostRepository {
 
     val data: LiveData<List<Post>>
 
-    fun likes(postId : Long)
-    fun share()
+    fun likeById(postId : Long)
+    fun shareById(postId : Long)
 }
