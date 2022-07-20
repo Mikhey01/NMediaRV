@@ -22,10 +22,10 @@ class MainActivity : AppCompatActivity() {
         val viewModel: PostViewModel by viewModels()
         val adapter = PostAdaptor(
             likeClickListener = {post ->
-                viewModel.onLikeClicked(post.id)
+                viewModel.onLikeClicked(post)
             },
             shareClickListener = {post ->
-                viewModel.onShareClicked(post.id)
+                viewModel.onShareClicked(post)
             }
         )
 

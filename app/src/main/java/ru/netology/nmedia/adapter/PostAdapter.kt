@@ -9,7 +9,8 @@ import ru.netology.nmedia.Post
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 
-//typealias ClickListener = (Post) -> Unit
+typealias LikeClickListener = (Post) -> Unit
+typealias ShareClickListener = (Post) -> Unit
 
 fun likesCounters(count: Long): String {
     val result = when {
@@ -24,14 +25,14 @@ fun likesCounters(count: Long): String {
 }
 
 class PostAdaptor(
-    private val likeClickListener : (Post) -> Unit,
-    private val shareClickListener: (Post) -> Unit
+    private val likeClickListener: LikeClickListener,
+    private val shareClickListener: ShareClickListener
 ) : ListAdapter<Post, PostAdaptor.PostViewHolder>(PostDiffItemCallback()) {
 
     class PostViewHolder(
         private val binding: CardPostBinding,
-        private val likeClickListener: (Post) -> Unit,
-        private val shareClickListener: (Post) -> Unit
+        private val likeClickListener: LikeClickListener,
+        private val shareClickListener: ShareClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(post: Post) = with(binding) {
             authorName.text = post.author
