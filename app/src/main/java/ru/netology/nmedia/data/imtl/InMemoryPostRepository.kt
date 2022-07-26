@@ -158,19 +158,19 @@ class InMemoryPostRepository : PostRepository {
 
     override fun save(post: Post) {
         if (post.id == PostRepository.NEW_POST_ID) insert(post) else update(post)
-//        {
+//        run {
 //            posts = listOf(
 //                post.copy(
 //                    id = nextId++,
 //                    author = "Me",
-//                    likedByMe = false,
-//                    published = "now"
+//                    likeByMe = false,
+//                    publisher = "now"
 //                )
 //            ) + posts
 //            data.value = posts
 //            return
 //        }
-//
+
 //        posts = posts.map {
 //            if (it.id != post.id) it else it.copy(content = post.content)
 //        }
@@ -192,8 +192,15 @@ class InMemoryPostRepository : PostRepository {
     }
 
     override fun removeById(postId: Long) {
-        data.value = posts.filter { post ->
-            (post.id != postId)
+       posts = posts.filter {
+            (it.id != postId)
+        }
+        data.value = posts
+    }
+
+    override fun cancel(post: Post) {
+        data.value = posts.map {
+            if (it.id == post.id) post else it
         }
     }
 

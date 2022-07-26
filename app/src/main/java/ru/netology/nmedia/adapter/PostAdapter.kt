@@ -42,11 +42,10 @@ class PostAdaptor(
                             listener.removeClickListener(post)
                             true
                         }
-                            R.id.edit -> {
-                                listener.editClickListener(post)
-                                true
-                            }
-
+                        R.id.edit -> {
+                            listener.editClickListener(post)
+                            true
+                        }
                         else -> false
                     }
                 }
@@ -55,6 +54,8 @@ class PostAdaptor(
 
 
         fun bind(post: Post) = with(binding) {
+            avatar.setImageResource(R.drawable.ic_launcher_foreground)
+
             authorName.text = post.author
             date.text = post.publisher
             textPost.text = post.content
@@ -75,8 +76,6 @@ class PostAdaptor(
             share.setOnClickListener {
                 listener.shareClickListener(post)
             }
-
-
         }
     }
 

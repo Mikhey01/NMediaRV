@@ -35,9 +35,17 @@ class MainActivity : AppCompatActivity() {
                 hideKeyboard()
             }
         }
+
         viewModel.currentPost.observe(this) { currentPost ->
             binding.content.setText(currentPost?.content)
 
+        }
+        binding.cancelButton.setOnClickListener {
+            with(binding.content) {
+                setText("")
+                clearFocus()
+                hideKeyboard()
+            }
         }
     }
 }
