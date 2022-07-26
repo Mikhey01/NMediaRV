@@ -2,15 +2,13 @@ package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
-
-typealias LikeClickListener = (Post) -> Unit
-typealias ShareClickListener = (Post) -> Unit
 
 fun likesCounters(count: Long): String {
     val result = when {
@@ -25,15 +23,37 @@ fun likesCounters(count: Long): String {
 }
 
 class PostAdaptor(
-    private val likeClickListener: LikeClickListener,
-    private val shareClickListener: ShareClickListener
+    private val interectionListener: OnInteractionListener
 ) : ListAdapter<Post, PostAdaptor.PostViewHolder>(PostDiffItemCallback()) {
 
     class PostViewHolder(
         private val binding: CardPostBinding,
-        private val likeClickListener: LikeClickListener,
-        private val shareClickListener: ShareClickListener
+
+        private val listener: OnInteractionListener,
     ) : RecyclerView.ViewHolder(binding.root) {
+        private lateinit var post: Post
+
+        private val popupMenu by lazy {
+            PopupMenu(itemView.context, binding.menu).apply {
+                inflate(R.menu.options_post)
+                setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.remove -> {
+                            listener.removeClickListener(post)
+                            true
+                        }
+                            R.id.edit -> {
+                                listener.editClickListener(post)
+                                true
+                            }
+
+                        else -> false
+                    }
+                }
+            }
+        }
+
+
         fun bind(post: Post) = with(binding) {
             authorName.text = post.author
             date.text = post.publisher
@@ -41,25 +61,28 @@ class PostAdaptor(
             quantityFavorit.text = likesCounters(post.countLikes)
             quantityShare.text = likesCounters(post.countShare)
             numberViews.text = likesCounters(post.countViews)
-            if (post.likeByMe) {
-                like.setImageResource(R.drawable.ic_favorite_24dp)
-            } else {
-                like.setImageResource(R.drawable.outline_favorite_border_24)
+            like.setImageResource(
+                if (post.likeByMe) R.drawable.ic_favorite_24dp else R.drawable.outline_favorite_border_24
+            )
+
+            menu.setOnClickListener {
+                popupMenu.show()
             }
 
             like.setOnClickListener {
-                likeClickListener(post)
-
+                listener.likeClickListener(post)
             }
             share.setOnClickListener {
-                shareClickListener(post)
+                listener.shareClickListener(post)
             }
+
+
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PostViewHolder(binding, likeClickListener, shareClickListener)
+        return PostViewHolder(binding, interectionListener)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {

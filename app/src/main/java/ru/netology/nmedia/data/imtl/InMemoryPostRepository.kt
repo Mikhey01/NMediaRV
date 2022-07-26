@@ -5,6 +5,7 @@ import ru.netology.nmedia.Post
 import ru.netology.nmedia.data.PostRepository
 
 class InMemoryPostRepository : PostRepository {
+    private var nextId = GENERATED_POSTS_AMOUNT.toLong()
     private var posts
         get() = checkNotNull(data.value)
         set(value) {
@@ -136,12 +137,11 @@ class InMemoryPostRepository : PostRepository {
 
     }
 
-
     override fun likeById(postId: Long) {
         posts = posts.map { post ->
             if (post.id != postId) post else post.copy(
-               likeByMe = !post.likeByMe,
-                countLikes = if (post.likeByMe) post.countLikes -1 else post.countLikes +1
+                likeByMe = !post.likeByMe,
+                countLikes = if (post.likeByMe) post.countLikes - 1 else post.countLikes + 1
             )
         }
         data.value = posts
@@ -150,11 +150,57 @@ class InMemoryPostRepository : PostRepository {
     override fun shareById(postId: Long) {
         posts = posts.map { post ->
             if (post.id != postId) post else post.copy(
-                countShare = post.countShare +1
+                countShare = post.countShare + 1
             )
         }
         data.value = posts
     }
+
+    override fun save(post: Post) {
+        if (post.id == PostRepository.NEW_POST_ID) insert(post) else update(post)
+//        {
+//            posts = listOf(
+//                post.copy(
+//                    id = nextId++,
+//                    author = "Me",
+//                    likedByMe = false,
+//                    published = "now"
+//                )
+//            ) + posts
+//            data.value = posts
+//            return
+//        }
+//
+//        posts = posts.map {
+//            if (it.id != post.id) it else it.copy(content = post.content)
+//        }
+//        data.value = posts
+    }
+
+    private fun insert(post: Post) {
+        data.value = listOf(
+            post.copy(
+                id = ++nextId
+            )
+        ) + posts
+    }
+
+    private fun update(post: Post) {
+        data.value = posts.map {
+            if (it.id == post.id) post else it
+        }
+    }
+
+    override fun removeById(postId: Long) {
+        data.value = posts.filter { post ->
+            (post.id != postId)
+        }
+    }
+
+    private companion object {
+        const val GENERATED_POSTS_AMOUNT = 1000
+    }
+
 }
 
 

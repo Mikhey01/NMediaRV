@@ -9,4 +9,10 @@ interface PostRepository {
 
     fun likeById(postId : Long)
     fun shareById(postId : Long)
+    fun save(post: Post)
+    fun removeById(postId : Long)
+
+    companion object{
+        const val NEW_POST_ID = 0L
+    }
 }
