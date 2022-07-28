@@ -32,6 +32,14 @@ class PostViewModel : ViewModel(), OnInteractionListener {
         currentPost.value =null
     }
 
+//    fun onCancelButtonClicked(content: String) {
+//        if (content.isBlank()) return
+//        val post = currentPost.value?.copy(
+//            content = currentPost.toString())
+//        repository.cancel()
+//        currentPost.value = null
+//    }
+
 
     override fun likeClickListener(post: Post) = repository.likeById(post.id)
     override fun shareClickListener(post: Post) = repository.shareById(post.id)
@@ -39,6 +47,16 @@ class PostViewModel : ViewModel(), OnInteractionListener {
     override fun editClickListener(post: Post) {
         currentPost.value = post
            }
+
+    override fun cancelClickListener() {
+      repository.cancel()
+        currentPost.value = null
+    }
+
+    override fun onCancelButtonClicked() {
+          repository.cancel()
+        currentPost.value = null
+    }
 
 
 }

@@ -158,23 +158,6 @@ class InMemoryPostRepository : PostRepository {
 
     override fun save(post: Post) {
         if (post.id == PostRepository.NEW_POST_ID) insert(post) else update(post)
-//        run {
-//            posts = listOf(
-//                post.copy(
-//                    id = nextId++,
-//                    author = "Me",
-//                    likeByMe = false,
-//                    publisher = "now"
-//                )
-//            ) + posts
-//            data.value = posts
-//            return
-//        }
-
-//        posts = posts.map {
-//            if (it.id != post.id) it else it.copy(content = post.content)
-//        }
-//        data.value = posts
     }
 
     private fun insert(post: Post) {
@@ -198,10 +181,8 @@ class InMemoryPostRepository : PostRepository {
         data.value = posts
     }
 
-    override fun cancel(post: Post) {
-        data.value = posts.map {
-            if (it.id == post.id) post else it
-        }
+    override fun cancel() {
+        data.value = posts
     }
 
     private companion object {

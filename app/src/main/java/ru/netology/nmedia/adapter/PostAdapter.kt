@@ -31,28 +31,6 @@ class PostAdaptor(
 
         private val listener: OnInteractionListener,
     ) : RecyclerView.ViewHolder(binding.root) {
-        private lateinit var post: Post
-
-        private val popupMenu by lazy {
-            PopupMenu(itemView.context, binding.menu).apply {
-                inflate(R.menu.options_post)
-                setOnMenuItemClickListener { menuItem ->
-                    when (menuItem.itemId) {
-                        R.id.remove -> {
-                            listener.removeClickListener(post)
-                            true
-                        }
-                        R.id.edit -> {
-                            listener.editClickListener(post)
-                            true
-                        }
-                        else -> false
-                    }
-                }
-            }
-        }
-
-
         fun bind(post: Post) = with(binding) {
             avatar.setImageResource(R.drawable.ic_launcher_foreground)
 
@@ -65,9 +43,23 @@ class PostAdaptor(
             like.setImageResource(
                 if (post.likeByMe) R.drawable.ic_favorite_24dp else R.drawable.outline_favorite_border_24
             )
-
             menu.setOnClickListener {
-                popupMenu.show()
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.options_post)
+                    setOnMenuItemClickListener { Item ->
+                        when (Item.itemId) {
+                            R.id.remove -> {
+                                listener.removeClickListener(post)
+                                true
+                            }
+                            R.id.edit -> {
+                                listener.editClickListener(post)
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                }.show()
             }
 
             like.setOnClickListener {
@@ -76,6 +68,7 @@ class PostAdaptor(
             share.setOnClickListener {
                 listener.shareClickListener(post)
             }
+
         }
     }
 

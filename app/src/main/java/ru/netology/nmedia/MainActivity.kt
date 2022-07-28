@@ -3,8 +3,12 @@ package ru.netology.nmedia
 //import ru.netology.nmedia.adapter.PostAdapter
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.card_post.view.*
 import ru.netology.nmedia.adapter.PostAdaptor
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.util.hideKeyboard
@@ -27,28 +31,38 @@ class MainActivity : AppCompatActivity() {
             adapter.submitList(posts)
         }
 
-        binding.save.setOnClickListener{
+        binding.save.setOnClickListener {
             with(binding.content) {
                 val content = text.toString()
                 viewModel.onSaveButtonClicked(content)
                 clearFocus()
                 hideKeyboard()
             }
-        }
 
-        viewModel.currentPost.observe(this) { currentPost ->
-            binding.content.setText(currentPost?.content)
+            binding.cancelButton.setOnClickListener {
+                viewModel.onCancelButtonClicked()
+            }
 
-        }
-        binding.cancelButton.setOnClickListener {
-            with(binding.content) {
-                setText("")
-                clearFocus()
-                hideKeyboard()
+            viewModel.currentPost.observe(this) { currentPost ->
+                with(binding.content) {
+                    val content = currentPost?.content
+                    setText(content)
+                    if (content != null) {
+                        binding.group.visibility = View.VISIBLE
+                        requestFocus()
+
+                    } else {
+                        clearFocus()
+                        hideKeyboard()
+                    }
+                }
             }
         }
     }
 }
+
+
+
 
 
 

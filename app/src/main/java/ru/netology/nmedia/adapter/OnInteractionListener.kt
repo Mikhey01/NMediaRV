@@ -7,4 +7,7 @@ interface OnInteractionListener {
     fun shareClickListener(post: Post){}
     fun removeClickListener(post: Post){}
     fun editClickListener(post: Post){}
+    fun cancelClickListener() {}
+    fun onCancelButtonClicked()
+
 }
