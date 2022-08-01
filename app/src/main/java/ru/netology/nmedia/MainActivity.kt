@@ -39,24 +39,29 @@ class MainActivity : AppCompatActivity() {
                 hideKeyboard()
             }
 
+//            viewModel.currentPost.observe(this) { currentPost ->
+//                binding.content.setText(currentPost?.content)
+//            }
             binding.cancelButton.setOnClickListener {
                 viewModel.onCancelButtonClicked()
             }
 
-            viewModel.currentPost.observe(this) { currentPost ->
-                with(binding.content) {
-                    val content = currentPost?.content
-                    setText(content)
-                    if (content != null) {
-                        binding.group.visibility = View.VISIBLE
-                        requestFocus()
+        viewModel.currentPost.observe(this) { currentPost ->
+            with (binding.content) {
+                val content = currentPost?.content
+                setText(content)
+                if (content != null) {
+                   // binding.content.text =   currentPost.content
+                    binding.group.visibility = View.VISIBLE
+                    requestFocus()
 
-                    } else {
-                        clearFocus()
-                        hideKeyboard()
-                    }
+                } else {
+                    clearFocus()
+                   // binding.group.visibility = View.GONE
+                    hideKeyboard()
                 }
             }
+        }
         }
     }
 }

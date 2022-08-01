@@ -29,7 +29,7 @@ class PostViewModel : ViewModel(), OnInteractionListener {
             likeByMe = false
         )
         repository.save(post)
-        currentPost.value =null
+        currentPost.value = null
     }
 
 //    fun onCancelButtonClicked(content: String) {

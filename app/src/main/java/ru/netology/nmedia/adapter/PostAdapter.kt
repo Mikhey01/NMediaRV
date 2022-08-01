@@ -33,16 +33,18 @@ class PostAdaptor(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(post: Post) = with(binding) {
             avatar.setImageResource(R.drawable.ic_launcher_foreground)
-
             authorName.text = post.author
             date.text = post.publisher
             textPost.text = post.content
-            quantityFavorit.text = likesCounters(post.countLikes)
-            quantityShare.text = likesCounters(post.countShare)
-            numberViews.text = likesCounters(post.countViews)
-            like.setImageResource(
-                if (post.likeByMe) R.drawable.ic_favorite_24dp else R.drawable.outline_favorite_border_24
-            )
+           // quantityFavorit.text = likesCounters(post.countLikes)
+            //quantityShare.text = likesCounters(post.countShare)
+            share.text = likesCounters(post.countShare)
+            //numberViews.text = likesCounters(post.countViews)
+            like.isChecked = post.likeByMe
+            like.text = "${likesCounters((post.countLikes))}"
+//            like.setImageResource(
+//                if (post.likeByMe) R.drawable.ic_favorite_24dp else R.drawable.outline_favorite_border_24
+//            )
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)
