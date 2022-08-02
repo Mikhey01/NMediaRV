@@ -49,23 +49,15 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/menu"
         style="@style/Widget.AppThemes.ShareCheckbox"
-        android:layout_width="36dp"
-        android:layout_height="46dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         app:icon="@drawable/ic_options_24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
     </com.google.android.material.button.MaterialButton>
-
-<!--    <androidx.appcompat.widget.AppCompatImageButton-->
-<!--        android:id="@+id/menu"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@android:color/transparent"-->
-<!--        android:src="@drawable/ic_options_24dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/headerBarrier"
@@ -115,7 +107,6 @@
         app:layout_constraintStart_toEndOf="@+id/like"
         app:layout_constraintTop_toTopOf="@id/headerBarrier2"
         app:icon="@drawable/outline_share_24"
-        android:checkable="true"
         tools:text="10500"
         style="@style/Widget.AppThemes.ShareCheckbox"
  />
