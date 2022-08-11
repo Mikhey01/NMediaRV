@@ -36,15 +36,12 @@ class PostAdaptor(
             authorName.text = post.author
             date.text = post.publisher
             textPost.text = post.content
-           // quantityFavorit.text = likesCounters(post.countLikes)
-            //quantityShare.text = likesCounters(post.countShare)
+
             share.text = likesCounters(post.countShare)
             //numberViews.text = likesCounters(post.countViews)
             like.isChecked = post.likeByMe
-            like.text = "${likesCounters((post.countLikes))}"
-//            like.setImageResource(
-//                if (post.likeByMe) R.drawable.ic_favorite_24dp else R.drawable.outline_favorite_border_24
-//            )
+            like.text = likesCounters((post.countLikes))
+
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)
