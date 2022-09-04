@@ -74,15 +74,46 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/headerBarrier"
         tools:text="Наша миссия - помочь встать на путь роста и начать цепочку перемен.  " />
+    <View
+        android:id="@+id/video_banner"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/video_live"
+        app:layout_constraintTop_toBottomOf="@id/textPost" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/headerBarrier2"
+    <View
+        android:id="@+id/play_video_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@android:drawable/ic_media_play"
+        app:layout_constraintBottom_toBottomOf="@id/video_banner"
+        app:layout_constraintEnd_toEndOf="@id/video_banner"
+        app:layout_constraintStart_toStartOf="@id/video_banner"
+        app:layout_constraintTop_toTopOf="@id/video_banner" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/video_group"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="gone"
+        app:constraint_referenced_ids="video_banner, play_video_button"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/content_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="textPost"
-        tools:layout_editor_absoluteX="12dp"
-        tools:layout_editor_absoluteY="227dp" />
+        app:constraint_referenced_ids="video_banner" />
+
+<!--    <androidx.constraintlayout.widget.Barrier-->
+<!--        android:id="@+id/headerBarrier2"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:barrierDirection="bottom"-->
+<!--        app:constraint_referenced_ids="textPost"-->
+<!--        tools:layout_editor_absoluteX="12dp"-->
+<!--        tools:layout_editor_absoluteY="227dp" />-->
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/like"
@@ -91,7 +122,7 @@
         android:layout_marginTop="12dp"
         android:checkable="true"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/headerBarrier2"
+        app:layout_constraintTop_toTopOf="@id/content_barrier"
         app:icon="@drawable/ic_like_24dp"
         style="@style/Widget.AppThemes.LikeCheckbox"
         tools:text="100500"
@@ -105,7 +136,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.069"
         app:layout_constraintStart_toEndOf="@+id/like"
-        app:layout_constraintTop_toTopOf="@id/headerBarrier2"
+        app:layout_constraintTop_toTopOf="@id/content_barrier"
         app:icon="@drawable/outline_share_24"
         tools:text="10500"
         style="@style/Widget.AppThemes.ShareCheckbox"

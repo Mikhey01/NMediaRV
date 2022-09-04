@@ -3,21 +3,13 @@ package ru.netology.nmedia
 //import ru.netology.nmedia.adapter.PostAdapter
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.view.View
-import androidx.activity.result.launch
-import androidx.activity.result.registerForActivityResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
-import kotlinx.android.synthetic.main.card_post.*
-import kotlinx.android.synthetic.main.card_post.view.*
-import ru.netology.nmedia.activity.NewPostActivity
 import ru.netology.nmedia.activity.NewPostResultContract
 import ru.netology.nmedia.adapter.PostAdaptor
 import ru.netology.nmedia.databinding.ActivityMainBinding
-import ru.netology.nmedia.util.hideKeyboard
 import ru.netology.nmedia.viewModel.PostViewModel
 
 
@@ -37,18 +29,18 @@ class MainActivity : AppCompatActivity() {
             adapter.submitList(posts)
         }
 
-        binding.save.setOnClickListener {
-            with(binding.content) {
-                val content = text.toString()
-                viewModel.onSaveButtonClicked(content)
-                clearFocus()
-                hideKeyboard()
-            }
-        }
-
-        binding.cancelButton.setOnClickListener {
-            viewModel.onCancelButtonClicked()
-        }
+//        binding.save.setOnClickListener {
+//            with(binding.content) {
+//                val content = text.toString()
+//                viewModel.onSaveButtonClicked(content)
+//                clearFocus()
+//                hideKeyboard()
+//            }
+//        }
+//
+//        binding.cancelButton.setOnClickListener {
+//            viewModel.onCancelButtonClicked()
+//        }
 
         viewModel.shareEvent.observe(this) { post ->
             val intent = Intent().apply {
@@ -61,28 +53,40 @@ class MainActivity : AppCompatActivity() {
             startActivity(shareIntent)
         }
 
-        viewModel.currentPost.observe(this) { currentPost ->
-            with(binding.content) {
-                val content = currentPost?.content
-                setText(content)
-                if (content != null) {
-                    binding.group.visibility = View.VISIBLE
-                    requestFocus()
-                } else {
-                    clearFocus()
-                    hideKeyboard()
-                    binding.group.visibility = View.INVISIBLE
-
-                }
+        viewModel.playVideo.observe(this) { videoUrl ->
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl))
+            if (intent.resolveActivity(packageManager) != null) {
+                startActivity(intent)
             }
         }
+
+
+//        viewModel.currentPost.observe(this) { currentPost ->
+//            with(binding.content) {
+//                val content = currentPost?.content
+//                setText(content)
+//                if (content != null) {
+//                    requestFocus()
+//                    showKeyboard()
+//                } else {
+//                    clearFocus()
+//                    hideKeyboard()
+//                }
+//            }
+//        }
+
         val newPostLauncher = registerForActivityResult(NewPostResultContract) { postContent ->
             postContent ?: return@registerForActivityResult
             viewModel.onSaveButtonClicked(postContent)
-
         }
+
         binding.fab.setOnClickListener {
-            newPostLauncher.launch()
+            viewModel.onAddClicked()
+        }
+
+        viewModel.navigateToPostContentEvent.observe(this) { postContent ->
+                newPostLauncher.launch(postContent)
+
         }
     }
 }

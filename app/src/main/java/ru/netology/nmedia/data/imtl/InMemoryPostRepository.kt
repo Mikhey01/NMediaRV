@@ -31,6 +31,7 @@ class InMemoryPostRepository : PostRepository {
                 countLikes = 999,
                 countShare = 0,
                 countViews = 450,
+                video = "https://youtu.be/NIYY1ARrW7s"
             ),
             Post(
                 id = 3,
@@ -51,6 +52,7 @@ class InMemoryPostRepository : PostRepository {
                 countLikes = 9,
                 countShare = 0,
                 countViews = 110,
+                video = "https://youtu.be/NIYY1ARrW7s"
             ),
             Post(
                 id = 8,
@@ -71,6 +73,7 @@ class InMemoryPostRepository : PostRepository {
                 countLikes = 99,
                 countShare = 0,
                 countViews = 10,
+                video = "https://youtu.be/NIYY1ARrW7s"
             ),
             Post(
                 id = 4,
@@ -91,6 +94,7 @@ class InMemoryPostRepository : PostRepository {
                 countLikes = 115,
                 countShare = 0,
                 countViews = 10,
+                video = "https://youtu.be/NIYY1ARrW7s"
             ),
             Post(
                 id = 78,
@@ -111,6 +115,7 @@ class InMemoryPostRepository : PostRepository {
                 countLikes = 999,
                 countShare = 0,
                 countViews = 10,
+                video = "https://youtu.be/NIYY1ARrW7s"
             ),
             Post(
                 id = 748,
@@ -131,6 +136,7 @@ class InMemoryPostRepository : PostRepository {
                 countLikes = 3629,
                 countShare = 0,
                 countViews = 10,
+                video = "https://youtu.be/NIYY1ARrW7s"
             ),
         )
         data = MutableLiveData(inishinaPost)

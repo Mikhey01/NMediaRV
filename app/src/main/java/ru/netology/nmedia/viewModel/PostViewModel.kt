@@ -8,15 +8,17 @@ import ru.netology.nmedia.data.PostRepository
 import ru.netology.nmedia.data.imtl.InMemoryPostRepository
 import ru.netology.nmedia.util.SingleLiveEvent
 
-class PostViewModel : ViewModel(), OnInteractionListener {
+ class PostViewModel : ViewModel(), OnInteractionListener {
 
     private val repository: PostRepository = InMemoryPostRepository()
     val data by repository :: data
 
     val shareEvent = SingleLiveEvent<Post>()
-    val navigateToPostContentEvent = SingleLiveEvent<Unit>()
+    val navigateToPostContentEvent = SingleLiveEvent<String?>()
 
     val currentPost = MutableLiveData<Post?>(null)
+    val playVideo = SingleLiveEvent<String>()
+    //val editedPost = MutableLiveData<Post?>(/*value*/null)
 
     fun onSaveButtonClicked(content: String) {
         if (content.isBlank()) return
@@ -36,6 +38,21 @@ class PostViewModel : ViewModel(), OnInteractionListener {
         currentPost.value = null
     }
 
+     fun onAddClicked() {
+         navigateToPostContentEvent.call()
+     }
+
+//    fun onEditButtonClicked(content: String) {
+//        if (content.isBlank()) return
+//        val editPost = editedPost.value?.copy(
+//            content = content
+//        )
+//        if (editPost != null) {
+//            repository.save(editPost)
+//        }
+//        editedPost.value = null
+//    }
+
     override fun likeClickListener(post: Post) = repository.likeById(post.id)
     override fun shareClickListener(post: Post) {
         repository.shareById(post.id)
@@ -45,21 +62,25 @@ class PostViewModel : ViewModel(), OnInteractionListener {
     override fun removeClickListener(post: Post) = repository.removeById(post.id)
     override fun editClickListener(post: Post) {
         currentPost.value = post
+        navigateToPostContentEvent.value = post.content
            }
 
-    override fun cancelClickListener() {
-      repository.cancel()
-        currentPost.value = null
-    }
 
-    override fun onCancelButtonClicked() {
+        override fun onCancelButtonClicked() {
           repository.cancel()
         currentPost.value = null
     }
 
-    fun save() {
-        navigateToPostContentEvent.call()
-    }
+     override fun onPlayVideoClicked(post: Post) {
+         val url: String = requireNotNull(post.video) { // проверяем, что есть url
+             "Url must not be null"
+         }
+         playVideo.value = url
+     }
+
+//    fun save() {
+//        navigateToPostContentEvent.call()
+//    }
 
 
 }
