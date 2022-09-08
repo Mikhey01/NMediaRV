@@ -29,19 +29,6 @@ class MainActivity : AppCompatActivity() {
             adapter.submitList(posts)
         }
 
-//        binding.save.setOnClickListener {
-//            with(binding.content) {
-//                val content = text.toString()
-//                viewModel.onSaveButtonClicked(content)
-//                clearFocus()
-//                hideKeyboard()
-//            }
-//        }
-//
-//        binding.cancelButton.setOnClickListener {
-//            viewModel.onCancelButtonClicked()
-//        }
-
         viewModel.shareEvent.observe(this) { post ->
             val intent = Intent().apply {
                 action = Intent.ACTION_SEND
@@ -60,20 +47,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-//        viewModel.currentPost.observe(this) { currentPost ->
-//            with(binding.content) {
-//                val content = currentPost?.content
-//                setText(content)
-//                if (content != null) {
-//                    requestFocus()
-//                    showKeyboard()
-//                } else {
-//                    clearFocus()
-//                    hideKeyboard()
-//                }
-//            }
-//        }
 
         val newPostLauncher = registerForActivityResult(NewPostResultContract) { postContent ->
             postContent ?: return@registerForActivityResult
