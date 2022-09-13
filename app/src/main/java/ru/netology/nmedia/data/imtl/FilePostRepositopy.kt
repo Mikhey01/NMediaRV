@@ -89,7 +89,7 @@ class FilePostRepository(
     }
 
     private fun update(post: Post) {
-        data.value = posts.map {
+        posts = posts.map {
             if (it.id == post.id) post else it
         }
     }
@@ -98,7 +98,7 @@ class FilePostRepository(
         posts = posts.filter {
             (it.id != postId)
         }
-        data.value = posts
+     //   data.value = posts
     }
 
     override fun cancel() {

@@ -18,8 +18,9 @@ class PostViewModel(
   //  private val repository: PostRepository = InMemoryPostRepository()
     val data by repository :: data
 
-    val shareEvent = SingleLiveEvent<Post>()
+    val shareEvent = SingleLiveEvent<String>()
     val navigateToPostContentEvent = SingleLiveEvent<String?>()
+    val navigateToSinglePostScreenEvent = SingleLiveEvent<Long>()
 
     private val currentPost = MutableLiveData<Post?>(null)
     val playVideo = SingleLiveEvent<String>()
@@ -49,7 +50,7 @@ class PostViewModel(
     override fun likeClickListener(post: Post) = repository.likeById(post.id)
     override fun shareClickListener(post: Post) {
         repository.shareById(post.id)
-       shareEvent.value = post
+       shareEvent.value = post.content
     }
 
     override fun removeClickListener(post: Post) = repository.removeById(post.id)
@@ -70,4 +71,40 @@ class PostViewModel(
          }
          playVideo.value = url
      }
+
+    override fun onPostClicked(post: Post) {
+        currentPost.value = post
+        navigateToSinglePostScreenEvent.value = post.id
+    }
+
+    fun addSinglePost(postId: Long) {
+        currentPost.value = data.value?.firstOrNull { post ->
+            post.id == postId
+        }
+    }
+
+    fun onLikeClickedSinglePost() {
+        currentPost.value?.let { repository.likeById(it.id) }
+    }
+
+    fun onShareClickedSinglePost() {
+        currentPost.value?.let { repository.shareById(it.id) }
+        shareEvent.value = currentPost.value?.content
+    }
+
+    fun onRemoveClickedSinglePost() {
+        currentPost.value?.let { repository.removeById(it.id) }
+    }
+
+    fun onEditClickedSinglePost() {
+        navigateToPostContentEvent.value = currentPost.value?.content
+    }
+
+    fun onPlayClickedSinglePost() {
+        val url: String = requireNotNull(currentPost.value?.video) { // проверяем, что есть url
+            "Url must not be null"
+        }
+        playVideo.value = url
+    }
+
 }
