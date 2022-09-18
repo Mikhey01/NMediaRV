@@ -1,13 +1,21 @@
 package ru.netology.nmedia.viewModel
 
 import android.app.Application
+import android.os.Bundle
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.Post
+import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.data.PostRepository
 import ru.netology.nmedia.data.imtl.FilePostRepository
+import ru.netology.nmedia.ui.NewPostFragment.Companion.longArg
 import ru.netology.nmedia.util.SingleLiveEvent
+
+lateinit var newCurrentPost : MutableLiveData<Post>
 
 class PostViewModel(
     application: Application
@@ -24,6 +32,7 @@ class PostViewModel(
 
     private val currentPost = MutableLiveData<Post?>(null)
     val playVideo = SingleLiveEvent<String>()
+
 
     fun onSaveButtonClicked(content: String) {
         if (content.isBlank()) return
@@ -72,36 +81,36 @@ class PostViewModel(
          playVideo.value = url
      }
 
-    override fun onPostClicked(post: Post) {
-        currentPost.value = post
-        navigateToSinglePostScreenEvent.value = post.id
+    override fun onPostClicked(postId: Long) {
+
+        navigateToSinglePostScreenEvent.call()
     }
 
     fun addSinglePost(postId: Long) {
-        currentPost.value = data.value?.firstOrNull { post ->
+        newCurrentPost.value = data.value?.firstOrNull { post ->
             post.id == postId
         }
     }
 
     fun onLikeClickedSinglePost() {
-        currentPost.value?.let { repository.likeById(it.id) }
+        newCurrentPost.value?.let { repository.likeById(it.id) }
     }
 
     fun onShareClickedSinglePost() {
-        currentPost.value?.let { repository.shareById(it.id) }
+        newCurrentPost.value?.let { repository.shareById(it.id) }
         shareEvent.value = currentPost.value?.content
     }
 
     fun onRemoveClickedSinglePost() {
-        currentPost.value?.let { repository.removeById(it.id) }
+        newCurrentPost.value?.let { repository.removeById(it.id) }
     }
 
     fun onEditClickedSinglePost() {
-        navigateToPostContentEvent.value = currentPost.value?.content
+        navigateToPostContentEvent.value = newCurrentPost.value?.content
     }
 
     fun onPlayClickedSinglePost() {
-        val url: String = requireNotNull(currentPost.value?.video) { // проверяем, что есть url
+        val url: String = requireNotNull(newCurrentPost.value?.video) { // проверяем, что есть url
             "Url must not be null"
         }
         playVideo.value = url

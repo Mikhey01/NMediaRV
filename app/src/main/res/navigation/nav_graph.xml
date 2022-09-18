@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/postContentFragment"
-        android:name="ru.netology.nmedia.ui.PostContentFragment"
+        android:name="ru.netology.nmedia.ui.NewPostFragment"
         tools:layout="@layout/post_content_fragment">
 
         <argument

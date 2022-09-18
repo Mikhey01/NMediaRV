@@ -20,38 +20,10 @@ import ru.netology.nmedia.viewModel.PostViewModel
 
 
 class SinglePostFragment : Fragment() {
-    private val viewModel: PostViewModel by viewModels()
+
+
+
     private val args by navArgs<SinglePostFragmentArgs>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel.navigateToPostContentEvent.observe(this) { initialContent ->
-            val direction =
-                SinglePostFragmentDirections.singlePostFragmentToPostContentFragment(
-                    initialContent
-                ) // навигация
-            findNavController().navigate(direction)
-        }
-
-        viewModel.playVideo.observe(this) { videoUrl ->
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl))
-            if (intent.resolveActivity(requireActivity().packageManager) != null) {
-                startActivity(intent)
-            }
-        }
-
-        viewModel.shareEvent.observe(this) { postContent ->
-            val intent = Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, postContent)
-                type = "text/plain"
-            }
-            val shareIntent =
-                Intent.createChooser(intent, "Поделиться")
-            startActivity(shareIntent)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,8 +31,17 @@ class SinglePostFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = SinglePostViewBinding.inflate(layoutInflater, container, false)
         .also { binding ->
+            val viewModel: PostViewModel by viewModels(
+                ownerProducer = ::requireParentFragment
+            )
+
             val postId = args.postId
             viewModel.addSinglePost(postId)
+
+           viewModel.data.value?.firstOrNull { post ->
+                post.id == postId
+            } ?: findNavController().popBackStack()
+
 
             viewModel.data.observe(viewLifecycleOwner) { posts ->
                 posts.firstOrNull { post ->
@@ -74,10 +55,12 @@ class SinglePostFragment : Fragment() {
                     setOnMenuItemClickListener { menuItem ->
                         when (menuItem.itemId) {
                             R.id.remove -> {
+
                                 viewModel.onRemoveClickedSinglePost()
-                                val direction =
-                                    SinglePostFragmentDirections.singlePostFragmentToFeedFragment()
-                                findNavController().navigate(direction)
+                                findNavController().navigateUp()
+//                                val direction =
+//                                    SinglePostFragmentDirections.singlePostFragmentToFeedFragment()
+//                                findNavController().navigate(direction)
                                 true
                             }
                             R.id.edit -> {

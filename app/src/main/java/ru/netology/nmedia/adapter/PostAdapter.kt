@@ -1,15 +1,19 @@
 package ru.netology.nmedia.adapter
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
+import ru.netology.nmedia.ui.NewPostFragment.Companion.longArg
 
 fun likesCounters(count: Long): String {
     val result = when {
@@ -60,6 +64,10 @@ class PostAdaptor(
                         }
                     }
                 }.show()
+            }
+
+            textPost.setOnClickListener {
+                listener.onPostClicked(post.id)
             }
 
             like.setOnClickListener {

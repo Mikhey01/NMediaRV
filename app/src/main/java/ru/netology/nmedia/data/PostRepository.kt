@@ -13,6 +13,7 @@ interface PostRepository {
     fun removeById(postId : Long)
     fun  cancel ()
 
+
     companion object{
         const val NEW_POST_ID = 0L
     }

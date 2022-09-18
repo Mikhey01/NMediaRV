@@ -9,6 +9,6 @@ interface OnInteractionListener {
     fun editClickListener(post: Post) {}
     fun onCancelButtonClicked()
     fun onPlayVideoClicked(post: Post)
-    fun onPostClicked(post: Post)
+   fun onPostClicked(postId: Long)
 
 }
