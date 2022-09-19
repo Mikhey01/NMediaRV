@@ -16,14 +16,15 @@ import resFormat
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.SinglePostViewBinding
 import ru.netology.nmedia.Post
+import ru.netology.nmedia.ui.NewPostFragment.Companion.textArg
+import ru.netology.nmedia.util.StringArg
 import ru.netology.nmedia.viewModel.PostViewModel
 
 
 class SinglePostFragment : Fragment() {
 
-
-
     private val args by navArgs<SinglePostFragmentArgs>()
+    private lateinit var post: Post
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,17 +37,14 @@ class SinglePostFragment : Fragment() {
             )
 
             val postId = args.postId
-            viewModel.addSinglePost(postId)
-
-           viewModel.data.value?.firstOrNull { post ->
-                post.id == postId
-            } ?: findNavController().popBackStack()
-
 
             viewModel.data.observe(viewLifecycleOwner) { posts ->
                 posts.firstOrNull { post ->
                     post.id == postId
-                }?.let { bind(it, binding) }
+                }?.let {
+                    post = it
+                    bind(it, binding)
+                } ?: findNavController().popBackStack()
             }
 
             val popupMenu by lazy {
@@ -55,16 +53,13 @@ class SinglePostFragment : Fragment() {
                     setOnMenuItemClickListener { menuItem ->
                         when (menuItem.itemId) {
                             R.id.remove -> {
-
-                                viewModel.onRemoveClickedSinglePost()
                                 findNavController().navigateUp()
-//                                val direction =
-//                                    SinglePostFragmentDirections.singlePostFragmentToFeedFragment()
-//                                findNavController().navigate(direction)
+                                viewModel.removeClickListener(post)
                                 true
                             }
                             R.id.edit -> {
-                                viewModel.onEditClickedSinglePost()
+                                findNavController().navigateUp()
+                                viewModel.editClickListener(post)
                                 true
                             }
                             else -> false
@@ -75,20 +70,38 @@ class SinglePostFragment : Fragment() {
 
             with(binding.singlePostView) {
                 like.setOnClickListener {
-                    viewModel.onLikeClickedSinglePost()
+                    viewModel.likeClickListener(post)
                 }
                 share.setOnClickListener {
-                    viewModel.onShareClickedSinglePost()
+                    viewModel.shareClickListener(post)
+                    viewModel.shareEvent.observe(viewLifecycleOwner) { postContent ->
+                        val intent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_TEXT, postContent)
+                            type = "text/plain"
+                        }
+                        val shareIntent =
+                            Intent.createChooser(intent, "Поделиться")
+                        startActivity(shareIntent)
+                    }
+
                 }
                 videoBanner.setOnClickListener {
-                    viewModel.onPlayClickedSinglePost()
+                    viewModel.onPlayVideoClicked(post)
                 }
                 playVideoButton.setOnClickListener {
-                    viewModel.onPlayClickedSinglePost()
+                    viewModel.onPlayVideoClicked(post)
+                    viewModel.playVideo.observe(viewLifecycleOwner) { videoUrl ->
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl))
+                        if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                            startActivity(intent)
+                        }
+                    }
                 }
                 menu.setOnClickListener { popupMenu.show() }
             }
         }.root
+
 
     private fun bind(post: Post, binding: SinglePostViewBinding) {
         with(binding.singlePostView) {
@@ -101,6 +114,9 @@ class SinglePostFragment : Fragment() {
             like.isChecked = post.likeByMe
 
             videoGroup.isVisible = post.video != null
+
         }
     }
+
+
 }

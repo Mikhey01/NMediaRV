@@ -15,8 +15,6 @@ import ru.netology.nmedia.data.imtl.FilePostRepository
 import ru.netology.nmedia.ui.NewPostFragment.Companion.longArg
 import ru.netology.nmedia.util.SingleLiveEvent
 
-lateinit var newCurrentPost : MutableLiveData<Post>
-
 class PostViewModel(
     application: Application
 ) : AndroidViewModel(application), OnInteractionListener {
@@ -68,7 +66,6 @@ class PostViewModel(
         navigateToPostContentEvent.value = post.content
            }
 
-
         override fun onCancelButtonClicked() {
           repository.cancel()
         currentPost.value = null
@@ -82,38 +79,40 @@ class PostViewModel(
      }
 
     override fun onPostClicked(postId: Long) {
-
-        navigateToSinglePostScreenEvent.call()
+        navigateToSinglePostScreenEvent.value = postId
     }
 
-    fun addSinglePost(postId: Long) {
-        newCurrentPost.value = data.value?.firstOrNull { post ->
-            post.id == postId
-        }
-    }
+    fun deleteById(id: Long) = repository.removeById(id)
 
-    fun onLikeClickedSinglePost() {
-        newCurrentPost.value?.let { repository.likeById(it.id) }
-    }
 
-    fun onShareClickedSinglePost() {
-        newCurrentPost.value?.let { repository.shareById(it.id) }
-        shareEvent.value = currentPost.value?.content
-    }
-
-    fun onRemoveClickedSinglePost() {
-        newCurrentPost.value?.let { repository.removeById(it.id) }
-    }
-
-    fun onEditClickedSinglePost() {
-        navigateToPostContentEvent.value = newCurrentPost.value?.content
-    }
-
-    fun onPlayClickedSinglePost() {
-        val url: String = requireNotNull(newCurrentPost.value?.video) { // проверяем, что есть url
-            "Url must not be null"
-        }
-        playVideo.value = url
-    }
+//    fun addSinglePost(postId: Long) {
+//        newCurrentPost.value = data.value?.firstOrNull { post ->
+//            post.id == postId
+//        }
+//    }
+//
+//    fun onLikeClickedSinglePost() {
+//        newCurrentPost.value?.let { repository.likeById(it.id) }
+//    }
+//
+//    fun onShareClickedSinglePost() {
+//        newCurrentPost.value?.let { repository.shareById(it.id) }
+//        shareEvent.value = currentPost.value?.content
+//    }
+//
+//    fun onRemoveClickedSinglePost() {
+//        newCurrentPost.value?.let { repository.removeById(it.id) }
+//    }
+//
+//    fun onEditClickedSinglePost() {
+//        navigateToPostContentEvent.value = newCurrentPost.value?.content
+//    }
+//
+//    fun onPlayClickedSinglePost() {
+//        val url: String = requireNotNull(newCurrentPost.value?.video) { // проверяем, что есть url
+//            "Url must not be null"
+//        }
+//        playVideo.value = url
+//    }
 
 }

@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ru.netology.nmedia.databinding.PostContentFragmentBinding
-import ru.netology.nmedia.util.LongArg
 import ru.netology.nmedia.util.StringArg
 import ru.netology.nmedia.viewModel.PostViewModel
 
@@ -54,9 +53,10 @@ class NewPostFragment : Fragment() {
     companion object {
         const val REQUEST_KEY = "requestKey"
         const val RESULT_KEY = "postContent"
-        var Bundle.textArg: String? by StringArg
 
-            var Bundle.longArg: Long by LongArg
+        var Bundle.textArg: String? by StringArg.StringArg
+
+            var Bundle.longArg: Long by StringArg.LongArg
 
     }
 }
